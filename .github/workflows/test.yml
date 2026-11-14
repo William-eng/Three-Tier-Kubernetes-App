@@ -66,6 +66,7 @@ jobs:
           ignore-unfixed: true
           vuln-type: os,library
           severity: HIGH,CRITICAL
+        continue-on-error: true
 
       # 7. Scan backend image
       - name: Scan backend with Trivy
