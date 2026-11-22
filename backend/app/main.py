@@ -1,11 +1,37 @@
-from fastapi import FastAPI
+
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-
 from app.api.v1.router import api_router
-
-
 import time
-from fastapi import Request
+
+
+# ==========================================
+# 1. Initialize FastAPI Application
+# ==========================================
+
+app = FastAPI(
+    title="Task Manager API",
+    version="1.0.0",
+    redirect_slashes=False
+)
+
+
+# ==========================================
+# 2. Configure CORS Middleware
+# ==========================================
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# ==========================================
+# 3. Request Monitoring Middleware
+# ==========================================
 
 @app.middleware("http")
 async def monitor_request(request: Request, call_next):
@@ -25,20 +51,9 @@ async def monitor_request(request: Request, call_next):
     return response
 
 
-app = FastAPI(
-    title="Task Manager API",
-    version="1.0.0",
-    redirect_slashes=False
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
+# ==========================================
+# 4. Health Check Endpoint
+# ==========================================
 
 @app.get("/health")
 def health_check():
@@ -46,6 +61,10 @@ def health_check():
         "status": "healthy"
     }
 
+
+# ==========================================
+# 5. Register API Routes
+# ==========================================
 
 app.include_router(
     api_router,

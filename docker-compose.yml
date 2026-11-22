@@ -99,6 +99,8 @@ services:
     command:
       - run
       - /etc/alloy/config.alloy
+    ports:
+      - "8080:8080"
     volumes:
       - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
